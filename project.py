@@ -17,7 +17,7 @@ def main():
         print(line)
 
 
-def parse_args():
+def parse_args() -> list:
     # Sets up the skeleton of the program
 
     parser = argparse.ArgumentParser(
@@ -32,7 +32,7 @@ def parse_args():
     parser.add_argument("FILENAME", nargs="*", default="*")
 
     args = parser.parse_args()
-    path_list = [Path(arg) for arg in args.FILENAME]
+    path_list: list[Path] = [Path(arg) for arg in args.FILENAME]
 
     # encode() converts string (args.pattern) to a bytes object
     pattern = re.compile(rb"" + args.PATTERN.encode(errors="strict") + rb"")
