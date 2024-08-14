@@ -12,8 +12,8 @@ def main():
         description="Checks for given pattern in files",
     )
 
-    # TODO: Need to fix: "TypeError: 'required' is an invalid argument for positionals"
-    parser.add_argument("pattern", type=str, help="Pattern to search for in file(s)")
+    # required param not allowed for positional args
+    parser.add_argument("PATTERN", type=str, help="Pattern to search for in file(s)")
 
     # TODO: Allow wildcards
     parser.add_argument("filename", type=str)
