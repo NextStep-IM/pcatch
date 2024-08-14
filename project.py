@@ -1,7 +1,6 @@
 import argparse
 from pathlib import Path
 import re
-import sys
 import mmap
 
 
@@ -24,20 +23,28 @@ def main():
     # encode() converts string (args.pattern) to a bytes object
     pattern = re.compile(rb"" + args.PATTERN.encode(errors="strict") + rb"") 
     
-    for line in search_pattern(pattern, file_path):
+    for line in search_pattern(pattern, path_list):
         print(line)
 
 
-def search_pattern(pattern: re, file_path: Path) -> list:
+def search_pattern(pattern: re, file_path: list[Path]) -> list:
     matches = []
-    with open(file_path, "r") as file_obj:
-        with mmap.mmap(file_obj.fileno(), length=0, access=mmap.ACCESS_READ) as mmap_obj:
-            for line in iter(mmap_obj.readline, b""):
-                if re.findall(pattern, line):
-                    # decode() converts byte object to string
-                    matches.append(line.decode())
+    for file in file_path:
+        try:
+            file_obj = open(file, "r")
+        except OSError as oe:
+            print(f"pcat: {file}: {oe}")
+            break
+        else:
+            with file_obj:
+                with mmap.mmap(file_obj.fileno(), length=0, access=mmap.ACCESS_READ) as mmap_obj:
+                    for line_num, line in enumerate(iter(mmap_obj.readline, b"")):
+                        if re.findall(pattern, line):
+                            # decode() converts byte object to string
+                            matches.append(f"{line_num}:{line.decode()}")
 
     return matches
-                
+
+
 if __name__ == "__main__":
     main()
