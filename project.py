@@ -56,10 +56,17 @@ def search_pattern(pattern: re, file_path: list[Path]) -> list:
                     for line_num, line in enumerate(iter(mmap_obj.readline, b"")):
                         if match := re.search(pattern, line):
                             # decode() converts byte object to string
-                            colored_str = Colors.RED + match.group().decode() + Colors.RESET
-                            line = re.sub(pattern, colored_str.encode(), line)
+                            color_pattern = (
+                                Colors.RED + match.group().decode() + Colors.RESET
+                            )
+                            color_path = (
+                                Colors.BLUE + str(file.absolute()) + Colors.RESET
+                            )
+                            color_line = re.sub(pattern, color_pattern.encode(), line)
+                            color_line_num = Colors.GREEN + str(line_num) + Colors.RESET
+
                             matches.append(
-                                f"{Colors.GREEN}{line_num}{Colors.RESET}:{line.decode()}"
+                                f"{color_path}\n:{color_line_num}{color_line.decode()}"
                             )
 
     return matches
