@@ -19,7 +19,7 @@ def main():
     parser.add_argument("FILENAME", nargs="*", default="*")
 
     args = parser.parse_args()
-    file_path = Path(args.filename)
+    path_list = [Path(arg) for arg in args.FILENAME]
 
     # encode() converts string (args.pattern) to a bytes object
     pattern = re.compile(rb"" + args.pattern.encode() + rb"") 
