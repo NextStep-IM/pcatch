@@ -11,7 +11,14 @@ class Colors:
 
 
 def main():
+    pattern, path_list = parse_args()
+    for line in search_pattern(pattern, path_list):
+        print(line)
+
+
+def parse_args():
     # Sets up the skeleton of the program
+
     parser = argparse.ArgumentParser(
         prog="pcat",
         description="Checks for given pattern in files",
