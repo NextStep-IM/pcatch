@@ -12,12 +12,17 @@ class Colors:
 
 
 def main():
-    pattern, path_list = parse_args()
+    args = parse_args()
+    path_list: list[Path] = [Path(arg) for arg in args.FILENAME]
+
+    # encode() converts string (args.pattern) to a bytes object
+    pattern = re.compile(rb"" + args.PATTERN.encode(errors="strict") + rb"")
+
     for line in search_pattern(pattern, path_list):
         print(line)
 
 
-def parse_args() -> list:
+def parse_args():
     # Sets up the skeleton of the program
 
     parser = argparse.ArgumentParser(
@@ -31,13 +36,8 @@ def parse_args() -> list:
     # TODO: Allow wildcards
     parser.add_argument("FILENAME", nargs="*", default="*")
 
-    args = parser.parse_args()
-    path_list: list[Path] = [Path(arg) for arg in args.FILENAME]
-
-    # encode() converts string (args.pattern) to a bytes object
-    pattern = re.compile(rb"" + args.PATTERN.encode(errors="strict") + rb"")
-
-    return [pattern, path_list]
+    parsed_args = parser.parse_args()
+    return parsed_args
 
 
 def search_pattern(pattern: re, file_path: list[Path]) -> list:
