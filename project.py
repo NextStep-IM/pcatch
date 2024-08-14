@@ -16,7 +16,7 @@ def main():
     parser.add_argument("PATTERN", type=str, help="Pattern to search for in file(s)")
 
     # TODO: Allow wildcards
-    parser.add_argument("filename", type=str)
+    parser.add_argument("FILENAME", nargs="*", default="*")
 
     args = parser.parse_args()
     file_path = Path(args.filename)
