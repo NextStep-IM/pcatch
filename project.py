@@ -24,9 +24,6 @@ def main():
     # encode() converts string (args.pattern) to a bytes object
     pattern = re.compile(rb"" + args.PATTERN.encode(errors="strict") + rb"") 
     
-    if not file_path.exists():
-        sys.exit(f"{args.prog}: {args.filename}: No such file or directory")
-
     for line in search_pattern(pattern, file_path):
         print(line)
 
