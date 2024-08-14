@@ -66,7 +66,7 @@ def search_pattern(pattern: re, file_path: list[Path]) -> list:
                             color_line_num = Colors.GREEN + str(line_num) + Colors.RESET
 
                             matches.append(
-                                f"{color_path}\n:{color_line_num}{color_line.decode()}"
+                                f"{color_path}\n{color_line_num}:{color_line.decode()}"
                             )
 
     return matches
