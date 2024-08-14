@@ -22,7 +22,7 @@ def main():
     path_list = [Path(arg) for arg in args.FILENAME]
 
     # encode() converts string (args.pattern) to a bytes object
-    pattern = re.compile(rb"" + args.pattern.encode() + rb"") 
+    pattern = re.compile(rb"" + args.PATTERN.encode(errors="strict") + rb"") 
     
     if not file_path.exists():
         sys.exit(f"{args.prog}: {args.filename}: No such file or directory")
