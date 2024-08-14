@@ -7,6 +7,7 @@ import mmap
 class Colors:
     RED = "\033[1;31m"
     GREEN = "\033[0;32m"
+    BLUE = "\033[34m"
     RESET = "\033[0;0m"
 
 
@@ -36,8 +37,7 @@ def parse_args():
     # encode() converts string (args.pattern) to a bytes object
     pattern = re.compile(rb"" + args.PATTERN.encode(errors="strict") + rb"")
 
-    for line in search_pattern(pattern, path_list):
-        print(line)
+    return [pattern, path_list]
 
 
 def search_pattern(pattern: re, file_path: list[Path]) -> list:
