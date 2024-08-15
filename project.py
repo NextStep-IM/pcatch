@@ -60,7 +60,7 @@ def parse_cmd_args():
     )
 
     # TODO: Allow wildcards
-    parser.add_argument("FILENAME", nargs="*", default="*")
+    parser.add_argument("FILENAME", nargs="*", default="**")
 
     parsed_args = parser.parse_args()
     return parsed_args
