@@ -13,7 +13,13 @@ class Colors:
 
 def main():
     args = parse_args()
-    path_list: list[Path] = [Path(arg) for arg in args.FILENAME]
+    # print(args.FILENAME)
+    path_list = []
+    wildcard_paths = []
+    path_list: list[Path] = [
+        Path(arg) if glob.escape(arg) == arg else wildcard_paths.append(arg)
+        for arg in args.FILENAME
+    ]
 
     # encode() converts string (args.pattern) to a bytes object
     pattern = re.compile(rb"" + args.PATTERN.encode(errors="strict") + rb"")
