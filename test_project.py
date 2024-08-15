@@ -10,3 +10,8 @@ def test_parse_args():
         args = parse_args()
         assert args.PATTERN == ["lorem"] # Type is list because of nargs=1
         assert args.FILENAME == ["file1.txt", "file2.txt"]
+    test_args = ["pcat"]
+    with patch.object(sys, "argv", test_args):
+        with pytest.raises(SystemExit):
+            parse_args()
+        
