@@ -70,7 +70,7 @@ def search_pattern(pattern: re, file_path: list[Path]) -> list:
     matches = []
     for file in file_path:
         try:
-            if file.stat().st_size == 0 or file.is_dir():  # Check if file is empty
+            if file.stat().st_size == 0:  # Check if file is empty
                 raise ValueError
             file_obj = open(file, "r")
         except OSError as oe:
