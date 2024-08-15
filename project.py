@@ -69,12 +69,18 @@ def search_pattern(pattern: re, file_path: list[Path]) -> list:
     matches = []
     for file in file_path:
         try:
+            if file.stat().st_size == 0: # Check if file is empty
+                raise ValueError
             file_obj = open(file, "r")
         except OSError as oe:
             print(f"pcat: {file}: {oe}")
-            break
+            continue
+        except ValueError:
+            continue
         else:
             with file_obj:
+
+                # Raises ValueError if file is empty
                 with mmap.mmap(
                     file_obj.fileno(), length=0, access=mmap.ACCESS_READ
                 ) as mmap_obj:
