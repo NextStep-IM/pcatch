@@ -3,6 +3,7 @@ from pathlib import Path
 import re
 import mmap
 import glob
+from binaryornot.check import is_binary
 
 
 class Colors:
@@ -42,7 +43,11 @@ def main():
 
 
 def expand_path(wildcard_path):
-    expanded_paths = [Path(path) for path in glob.glob(wildcard_path, recursive=True)]
+    expanded_paths = [
+        Path(path)
+        for path in glob.iglob(wildcard_path, recursive=True)
+        if not Path(path).is_dir() and not is_binary(path)
+    ]
     return expanded_paths
 
 
