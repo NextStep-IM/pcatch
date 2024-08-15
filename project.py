@@ -28,6 +28,12 @@ def main():
                 path_list.remove(None)
             except ValueError:
                 pass
+
+    
+
+    for pat in args.PATTERN:
+        args.PATTERN = str(pat)
+    # print(args.PATTERN)
     # encode() converts string (args.pattern) to a bytes object
     pattern = re.compile(rb"" + args.PATTERN.encode(errors="strict") + rb"")
 
