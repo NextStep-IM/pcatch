@@ -13,8 +13,7 @@ class Colors:
 
 
 def main():
-    args = parse_args()
-    # print(args.FILENAME)
+    args = parse_cmd_args()
     path_list = []
     wildcard_paths = []
     path_list: list[Path] = [
@@ -45,7 +44,7 @@ def expand_path(wildcard_path):
     return expanded_paths
 
 
-def parse_args():
+def parse_cmd_args():
     # Sets up the skeleton of the program
 
     parser = argparse.ArgumentParser(
