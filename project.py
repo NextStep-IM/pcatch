@@ -16,6 +16,8 @@ def main():
     args = parse_cmd_args()
     path_list = []
     wildcard_paths = []
+
+    # Filters paths with wildcards
     path_list: list[Path] = [
         Path(arg) if glob.escape(arg) == arg else wildcard_paths.append(arg)
         for arg in args.FILENAME
@@ -25,13 +27,13 @@ def main():
         for p in wildcard_paths:
             path_list.extend(expand_path(p))
             try:
+                # Reason: None exists as a value after extending the list for some reason
                 path_list.remove(None)
             except ValueError:
                 pass
 
     for pat in args.PATTERN:
         args.PATTERN = str(pat)
-    # print(args.PATTERN)
     # encode() converts string (args.pattern) to a bytes object
     pattern = re.compile(rb"" + args.PATTERN.encode(errors="strict") + rb"")
 
@@ -78,7 +80,6 @@ def search_pattern(pattern: re, file_path: list[Path]) -> list:
             continue
         else:
             with file_obj:
-
                 # Raises ValueError if file is empty
                 with mmap.mmap(
                     file_obj.fileno(), length=0, access=mmap.ACCESS_READ
@@ -97,7 +98,9 @@ def search_pattern(pattern: re, file_path: list[Path]) -> list:
                                     Colors.BLUE + str(file.absolute()) + Colors.RESET
                                 )
                                 matches.append(color_path)
-                            color_line = color_line.decode("latin-1")
+                            color_line = color_line.decode(
+                                "latin-1"
+                            )  # "latin-1" fixes UnicodeDecodeError
                             matches.append(f"{color_line_num}:{color_line}")
                             matched_file = True
 
