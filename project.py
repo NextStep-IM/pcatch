@@ -94,10 +94,12 @@ def search_pattern(pattern: re, file_path: list[Path]) -> list:
                             color_line = re.sub(pattern, color_pattern.encode(), line)
                             color_line_num = Colors.GREEN + str(line_num) + Colors.RESET
                             if not matched_file:
-                                color_path = Colors.BLUE + str(file.absolute()) + Colors.RESET
+                                color_path = (
+                                    Colors.BLUE + str(file.absolute()) + Colors.RESET
+                                )
                                 matches.append(color_path)
-
-                            matches.append(f"{color_line_num}:{color_line.decode()}")
+                            color_line = color_line.decode("latin-1")
+                            matches.append(f"{color_line_num}:{color_line}")
                             matched_file = True
 
     return matches
