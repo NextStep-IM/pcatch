@@ -21,11 +21,23 @@ def main():
         for arg in args.FILENAME
     ]
 
+    if wildcard_paths:
+        for p in wildcard_paths:
+            path_list.extend(expand_path(p))
+            try:
+                path_list.remove(None)
+            except ValueError:
+                pass
     # encode() converts string (args.pattern) to a bytes object
     pattern = re.compile(rb"" + args.PATTERN.encode(errors="strict") + rb"")
 
     for line in search_pattern(pattern, path_list):
         print(line)
+
+
+def expand_path(wildcard_path):
+    expanded_paths = [Path(path) for path in glob.glob(wildcard_path)]
+    return expanded_paths
 
 
 def parse_args():
