@@ -41,7 +41,7 @@ def main():
 
 
 def expand_path(wildcard_path):
-    expanded_paths = [Path(path) for path in glob.glob(wildcard_path)]
+    expanded_paths = [Path(path) for path in glob.glob(wildcard_path, recursive=True)]
     return expanded_paths
 
 
