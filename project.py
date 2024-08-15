@@ -31,7 +31,9 @@ def parse_args():
     )
 
     # required param not allowed for positional args
-    parser.add_argument("PATTERN", type=str, help="Pattern to search for in file(s)")
+    parser.add_argument(
+        "PATTERN", type=str, help="Pattern to search for in file(s)", nargs=1
+    )
 
     # TODO: Allow wildcards
     parser.add_argument("FILENAME", nargs="*", default="*")
