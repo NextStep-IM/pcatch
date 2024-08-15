@@ -2,6 +2,7 @@ import argparse
 from pathlib import Path
 import re
 import mmap
+import glob
 
 
 class Colors:
@@ -28,8 +29,6 @@ def main():
                 path_list.remove(None)
             except ValueError:
                 pass
-
-    
 
     for pat in args.PATTERN:
         args.PATTERN = str(pat)
