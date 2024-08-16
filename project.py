@@ -98,20 +98,12 @@ def search_pattern(pattern: Pattern[bytes], file_paths: list) -> list:
                     matched_file = False
                     for line_num, line in enumerate(iter(mmap_obj.readline, b"")):
                         if match := re.search(pattern, line):
-                            # decode() converts byte object to string
-                            color_pattern = (
-                                Colors.RED + match.group().decode() + Colors.RESET
-                            )
-                            color_line = re.sub(pattern, color_pattern.encode(), line)
-                            color_line_num = Colors.GREEN + str(line_num) + Colors.RESET
+                            color_pattern = b"\033[1;31m" + match.group() + b"\033[0;0m"
+                            color_line = re.sub(pattern, color_pattern, line)
+                            color_line_num = f"\033[0;32m{line_num}\033[0;0m"
                             if not matched_file:
-                                color_path = (
-                                    Colors.BLUE + str(file.absolute()) + Colors.RESET
-                                )
+                                color_path = f"\033[0;34m{Path(file).absolute()}\033[0;0m"
                                 matches.append(color_path)
-                            color_line = color_line.decode(
-                                "latin-1"
-                            )  # "latin-1" fixes UnicodeDecodeError. See: Issue #1
                             matches.append(f"{color_line_num}:{color_line}")
                             matched_file = True
 
