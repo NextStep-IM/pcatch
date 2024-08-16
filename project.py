@@ -1,10 +1,9 @@
 import re
 import mmap
-import glob
 import argparse
+from glob import escape, iglob
 from pathlib import Path
 from typing import Generator, Pattern
-from binaryornot.check import is_binary
 
 
 class Colors:
@@ -48,13 +47,13 @@ def filter_paths(file_paths) -> Generator:
 
 def expand_path(wildcard_path) -> Generator:
     # See: https://stackoverflow.com/a/51108375/23356858
-    p = Path(wildcard_path).expanduser()
-    parts = p.parts[p.is_absolute() :]
+    p = str(Path(wildcard_path).expanduser())
     try:
-        for path in Path(p.root).rglob(str(Path(*parts))):
-            if path.is_file() and not is_binary(str(path)):
+        for path in iglob(p, recursive=True):
+            path = Path(path)
+            if path.is_file():
                 yield path
-    except PermissionError: 
+    except PermissionError:
         pass
 
 
