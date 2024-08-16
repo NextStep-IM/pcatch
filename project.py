@@ -26,13 +26,6 @@ def main():
         print(line)
 
 
-def expand_path(wildcard_path):
-    expanded_paths = [
-        Path(path)
-        for path in glob.iglob(wildcard_path, recursive=True)
-        if not Path(path).is_dir() and not is_binary(path)
-    ]
-    return expanded_paths
 def filter_paths(file_paths) -> Generator:
     path_list: list[Path] = []
     wildcard_paths = []
@@ -51,6 +44,17 @@ def filter_paths(file_paths) -> Generator:
     if path_list:            
         for path in path_list:
             yield path
+
+def expand_path(wildcard_path) -> Generator:
+    p = Path(wildcard_path).expanduser()
+    parts = p.parts[p.is_absolute() :]
+    try:
+        for path in Path(p.root).rglob(str(Path(*parts))):
+            if path.is_file() and not is_binary(str(path)):
+                yield path
+    except PermissionError:
+        pass
+
 
 def parse_cmd_args():
     # Sets up the skeleton of the program
