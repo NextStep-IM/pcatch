@@ -1,6 +1,7 @@
 import re
 import mmap
 import argparse
+from sys import exit
 from glob import escape, iglob
 from pathlib import Path
 from typing import Generator, Pattern
@@ -19,8 +20,10 @@ def main():
     for pat in args.PATTERN:
         args.PATTERN = str(pat)
     # encode() converts string (args.pattern) to a bytes object
-    pattern = re.compile(rb"" + args.PATTERN.encode(errors="strict") + rb"")
-
+    try:
+        pattern = re.compile(rb"" + args.PATTERN.encode(errors="strict") + rb"")
+    except re.error as e:
+        exit(f"pcat: regex error: {e}")
     for line in search_pattern(pattern, args.FILENAME):
         print(line)
 
