@@ -76,9 +76,9 @@ def parse_cmd_args():
     return parsed_args
 
 
-def search_pattern(pattern: re, file_path: list[Path]) -> list:
+def search_pattern(pattern: Pattern[bytes], file_paths: list) -> list:
     matches = []
-    for file in file_path:
+    for file in filter_paths(file_paths):
         try:
             if file.stat().st_size == 0:  # Check if file is empty
                 raise ValueError
