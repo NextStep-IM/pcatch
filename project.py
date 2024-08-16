@@ -16,23 +16,6 @@ class Colors:
 
 def main():
     args = parse_cmd_args()
-    path_list = []
-    wildcard_paths = []
-
-    # Filters paths with wildcards
-    path_list: list[Path] = [
-        Path(arg) if glob.escape(arg) == arg else wildcard_paths.append(arg)
-        for arg in args.FILENAME
-    ]
-
-    if wildcard_paths:
-        for p in wildcard_paths:
-            path_list.extend(expand_path(p))
-            try:
-                # Reason: None exists as a value after extending the list for some reason
-                path_list.remove(None)
-            except ValueError:
-                pass
 
     for pat in args.PATTERN:
         args.PATTERN = str(pat)
@@ -50,7 +33,24 @@ def expand_path(wildcard_path):
         if not Path(path).is_dir() and not is_binary(path)
     ]
     return expanded_paths
+def filter_paths(file_paths) -> Generator:
+    path_list: list[Path] = []
+    wildcard_paths = []
 
+    # Filters paths with wildcards
+    for arg in file_paths:
+        if glob.escape(arg) == arg:
+            path_list.append(Path(arg).expanduser())
+        else:
+            wildcard_paths.append(arg)
+
+    if wildcard_paths:
+        for p in wildcard_paths:
+            for path in expand_path(p):
+                yield path           
+    if path_list:            
+        for path in path_list:
+            yield path
 
 def parse_cmd_args():
     # Sets up the skeleton of the program
