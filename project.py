@@ -30,7 +30,7 @@ def main():
 
 def filter_paths(file_paths) -> Generator:
     path_list: list[Path] = []
-    wildcard_paths = []
+    wildcard_paths: list = []
 
     # Filters paths with wildcards
     for arg in file_paths:
