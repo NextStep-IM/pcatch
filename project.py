@@ -100,6 +100,10 @@ def search_pattern(pattern: Pattern[bytes], file_paths: list) -> list:
                         if match := re.search(pattern, line):
                             color_pattern = b"\033[1;31m" + match.group() + b"\033[0;0m"
                             color_line = re.sub(pattern, color_pattern, line)
+                            try:
+                                color_line = color_line.decode()
+                            except UnicodeDecodeError:
+                                continue
                             color_line_num = f"\033[0;32m{line_num}\033[0;0m"
                             if not matched_file:
                                 color_path = f"\033[0;34m{Path(file).absolute()}\033[0;0m"
