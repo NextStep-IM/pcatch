@@ -40,19 +40,21 @@ def filter_paths(file_paths) -> Generator:
     if wildcard_paths:
         for p in wildcard_paths:
             for path in expand_path(p):
-                yield path           
-    if path_list:            
+                yield path
+    if path_list:
         for path in path_list:
             yield path
 
+
 def expand_path(wildcard_path) -> Generator:
+    # See: https://stackoverflow.com/a/51108375/23356858
     p = Path(wildcard_path).expanduser()
     parts = p.parts[p.is_absolute() :]
     try:
         for path in Path(p.root).rglob(str(Path(*parts))):
             if path.is_file() and not is_binary(str(path)):
                 yield path
-    except PermissionError:
+    except PermissionError: 
         pass
 
 
@@ -68,8 +70,6 @@ def parse_cmd_args():
     parser.add_argument(
         "PATTERN", type=str, help="Pattern to search for in file(s)", nargs=1
     )
-
-    # TODO: Allow wildcards
     parser.add_argument("FILENAME", nargs="*", default="**")
 
     parsed_args = parser.parse_args()
@@ -90,10 +90,9 @@ def search_pattern(pattern: Pattern[bytes], file_paths: list) -> list:
             continue
         else:
             with file_obj:
-                # Raises ValueError if file is empty
                 with mmap.mmap(
                     file_obj.fileno(), length=0, access=mmap.ACCESS_READ
-                ) as mmap_obj:
+                ) as mmap_obj:  # Raises ValueError if file is empty
                     matched_file = False
                     for line_num, line in enumerate(iter(mmap_obj.readline, b"")):
                         if match := re.search(pattern, line):
@@ -110,7 +109,7 @@ def search_pattern(pattern: Pattern[bytes], file_paths: list) -> list:
                                 matches.append(color_path)
                             color_line = color_line.decode(
                                 "latin-1"
-                            )  # "latin-1" fixes UnicodeDecodeError
+                            )  # "latin-1" fixes UnicodeDecodeError. See: Issue #1
                             matches.append(f"{color_line_num}:{color_line}")
                             matched_file = True
 
