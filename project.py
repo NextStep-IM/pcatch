@@ -34,7 +34,7 @@ def filter_paths(file_paths) -> Generator:
 
     # Filters paths with wildcards
     for arg in file_paths:
-        if glob.escape(arg) == arg:
+        if escape(arg) == arg:
             path_list.append(Path(arg).expanduser())
         else:
             wildcard_paths.append(arg)
