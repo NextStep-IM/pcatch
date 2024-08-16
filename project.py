@@ -22,7 +22,7 @@ def main():
     # encode() converts string (args.pattern) to a bytes object
     pattern = re.compile(rb"" + args.PATTERN.encode(errors="strict") + rb"")
 
-    for line in search_pattern(pattern, path_list):
+    for line in search_pattern(pattern, args.FILENAME):
         print(line)
 
 
