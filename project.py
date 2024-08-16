@@ -7,13 +7,6 @@ from pathlib import Path
 from typing import Generator, Pattern
 
 
-class Colors:
-    RED = "\033[1;31m"
-    GREEN = "\033[0;32m"
-    BLUE = "\033[34m"
-    RESET = "\033[0;0m"
-
-
 def main():
     args = parse_cmd_args()
 
