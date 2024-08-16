@@ -1,8 +1,9 @@
-import argparse
-from pathlib import Path
 import re
 import mmap
 import glob
+import argparse
+from pathlib import Path
+from typing import Generator, Pattern
 from binaryornot.check import is_binary
 
 
