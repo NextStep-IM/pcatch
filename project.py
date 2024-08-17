@@ -28,62 +28,135 @@ def deploy_paths(file_paths: list) -> Generator:
 
 def expand_path(path) -> Generator:
     non_text_file_extensions = [
-    # Binary Executables
-    ".exe", ".dll", ".so", ".bin", ".elf", ".o", ".a", ".dylib",
-
-    # Archives and Compressed Files
-    ".zip", ".tar", ".gz", ".bz2", ".xz", ".7z", ".rar", ".iso",
-
-    # Images
-    ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".ico", ".svg",
-
-    # Audio
-    ".mp3", ".wav", ".flac", ".aac", ".ogg", ".wma", ".m4a",
-
-    # Video
-    ".mp4", ".avi", ".mkv", ".mov", ".wmv", ".flv", ".mpeg", ".mpg",
-
-    # Fonts
-    ".ttf", ".otf", ".woff", ".woff2", ".eot",
-
-    # Documents and Office Files
-    ".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx", ".odt", ".ods", ".odp", ".epub",
-
-    # Database Files
-    ".db", ".sqlite", ".accdb", ".mdb", ".sqlitedb",
-
-    # System Files
-    ".sys", ".dll", ".dmg", ".vmdk", ".iso",
-
-    # Disk Images and Virtual Machines
-    ".img", ".vhd", ".vdi", ".vmdk",
-
-    # Binary Data Files
-    ".dat", ".bin", ".dbf",
-
-    # Object and Bytecode Files
-    ".class", ".pyc", ".pyo", ".jar", ".war",
-
-    # Encrypted Files
-    ".gpg", ".aes", ".enc",
-
-    # Application Files
-    ".apk", ".ipa", ".msi", ".deb", ".rpm",
-
-    # CAD and 3D Modeling
-    ".dwg", ".dxf", ".stl", ".3ds", ".obj",
-
-    # Configuration and System Backup
-    ".bak", ".cfg", ".conf", ".ini", ".reg", ".log",
-
-    # Multimedia Projects
-    ".psd", ".ai", ".indd", ".prproj", ".aep", ".blend",
-
-    # Temporary Files
-    ".tmp", ".swp", ".lock", ".bak",
-
-    # Miscellaneous
-    ".crt", ".key", ".pem", ".cer"
+        # Binary Executables
+        ".exe",
+        ".dll",
+        ".so",
+        ".bin",
+        ".elf",
+        ".o",
+        ".a",
+        ".dylib",
+        # Archives and Compressed Files
+        ".zip",
+        ".tar",
+        ".gz",
+        ".bz2",
+        ".xz",
+        ".7z",
+        ".rar",
+        ".iso",
+        # Images
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".gif",
+        ".bmp",
+        ".tiff",
+        ".ico",
+        ".svg",
+        # Audio
+        ".mp3",
+        ".wav",
+        ".flac",
+        ".aac",
+        ".ogg",
+        ".wma",
+        ".m4a",
+        # Video
+        ".mp4",
+        ".avi",
+        ".mkv",
+        ".mov",
+        ".wmv",
+        ".flv",
+        ".mpeg",
+        ".mpg",
+        # Fonts
+        ".ttf",
+        ".otf",
+        ".woff",
+        ".woff2",
+        ".eot",
+        # Documents and Office Files
+        ".pdf",
+        ".doc",
+        ".docx",
+        ".ppt",
+        ".pptx",
+        ".xls",
+        ".xlsx",
+        ".odt",
+        ".ods",
+        ".odp",
+        ".epub",
+        # Database Files
+        ".db",
+        ".sqlite",
+        ".accdb",
+        ".mdb",
+        ".sqlitedb",
+        # System Files
+        ".sys",
+        ".dll",
+        ".dmg",
+        ".vmdk",
+        ".iso",
+        # Disk Images and Virtual Machines
+        ".img",
+        ".vhd",
+        ".vdi",
+        ".vmdk",
+        # Binary Data Files
+        ".dat",
+        ".bin",
+        ".dbf",
+        # Object and Bytecode Files
+        ".class",
+        ".pyc",
+        ".pyo",
+        ".jar",
+        ".war",
+        # Encrypted Files
+        ".gpg",
+        ".aes",
+        ".enc",
+        # Application Files
+        ".apk",
+        ".ipa",
+        ".msi",
+        ".deb",
+        ".rpm",
+        # CAD and 3D Modeling
+        ".dwg",
+        ".dxf",
+        ".stl",
+        ".3ds",
+        ".obj",
+        # Configuration and System Backup
+        ".bak",
+        ".cfg",
+        ".conf",
+        ".ini",
+        ".reg",
+        ".log",
+        # Multimedia Projects
+        ".psd",
+        ".ai",
+        ".indd",
+        ".prproj",
+        ".aep",
+        ".blend",
+        # Temporary Files
+        ".tmp",
+        ".swp",
+        ".lock",
+        ".bak",
+        # Miscellaneous
+        ".crt",
+        ".key",
+        ".pem",
+        ".cer",
     ]
 
     path = Path(path).expanduser()
@@ -113,9 +186,19 @@ def parse_cmd_args():
     parser.add_argument(
         "PATTERN", type=str, help="Pattern to search for in file(s)", nargs=1
     )
-    parser.add_argument("FILENAME", nargs="*", default="**", help="Files(s) to search for")
-    parser.add_argument("-w", "--word", action="store_true", dest="WORD", help="Search pattern as word")
-    parser.add_argument("-i", "--ignore-case", action="store_true", dest="NO_CASE", help="Search case-insensitively")
+    parser.add_argument(
+        "FILENAME", nargs="*", default="**", help="Files(s) to search for"
+    )
+    parser.add_argument(
+        "-w", "--word", action="store_true", dest="WORD", help="Search pattern as word"
+    )
+    parser.add_argument(
+        "-i",
+        "--ignore-case",
+        action="store_true",
+        dest="NO_CASE",
+        help="Search case-insensitively",
+    )
 
     parsed_args = parser.parse_args()
     return parsed_args
@@ -132,7 +215,9 @@ def handle_regex(pattern: str, args) -> Pattern:
         compiled_pattern = re.compile(rb"\b" + compiled_pattern.pattern + rb"\b")
 
     if args.NO_CASE:
-        compiled_pattern = re.compile(rb"" + compiled_pattern.pattern + rb"", flags=re.IGNORECASE)
+        compiled_pattern = re.compile(
+            rb"" + compiled_pattern.pattern + rb"", flags=re.IGNORECASE
+        )
 
     return compiled_pattern
 
@@ -167,7 +252,9 @@ def search_pattern(pattern: Pattern[bytes], file_paths: list) -> list:
                                 continue
                             color_line_num = f"\033[0;32m{line_num}\033[0;0m"
                             if not matched_file:
-                                color_path = f"\033[0;34m{Path(file).absolute()}\033[0;0m"
+                                color_path = (
+                                    f"\033[0;34m{Path(file).absolute()}\033[0;0m"
+                                )
                                 matches.append(color_path)
                             matches.append(f"{color_line_num}:{color_line}")
                             matched_file = True
@@ -176,4 +263,7 @@ def search_pattern(pattern: Pattern[bytes], file_paths: list) -> list:
 
 
 if __name__ == "__main__":
+    # import time
+    # import cProfile
+    # cProfile.run("main()")
     main()
