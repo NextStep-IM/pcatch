@@ -257,7 +257,7 @@ def handle_regex(pattern: str, args) -> Pattern:
 
 
 def search_pattern(pattern: Pattern[bytes], file_paths: list) -> list:
-    """_summary_
+    """Searches pattern in file(s) with regex
 
     Args:
         pattern (Pattern[bytes]): Genereated regex pattern by handle_regex()
