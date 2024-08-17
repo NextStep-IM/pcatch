@@ -19,7 +19,7 @@ def main():
         print(line)
 
 
-def deploy_paths(file_paths) -> Generator:
+def deploy_paths(file_paths: list) -> Generator:
     # Filters paths with wildcards
     for arg in file_paths:
         for path in expand_path(arg):
@@ -121,7 +121,7 @@ def parse_cmd_args():
     return parsed_args
 
 
-def handle_regex(pattern, args):
+def handle_regex(pattern: str, args) -> Pattern:
     try:
         # encode() converts string (args.PATTERN) to a bytes object
         compiled_pattern = re.compile(rb"" + pattern.encode(errors="strict") + rb"")
