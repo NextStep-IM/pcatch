@@ -211,7 +211,7 @@ def parse_cmd_args():
     parser.add_argument(
         "PATH",
         nargs="*",
-        default="**",
+        default="*",
         help="Files(s) to search for. If no value is given, it will search the curreny working directory (non-recursively)",
     )
     parser.add_argument(
@@ -246,13 +246,12 @@ def handle_regex(pattern: str, args) -> Pattern:
         exit(f"pcat: regex error: {e}")
 
     if args.WORD:
-        compiled_pattern = re.compile(rb"\b" + compiled_pattern.pattern + rb"\b")
+        compiled_pattern = re.compile(rb"\b\s+" + compiled_pattern.pattern + rb"\s+\b")
 
     if args.NO_CASE:
         compiled_pattern = re.compile(
             rb"" + compiled_pattern.pattern + rb"", flags=re.IGNORECASE
         )
-
     return compiled_pattern
 
 
