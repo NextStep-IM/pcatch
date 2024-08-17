@@ -20,14 +20,14 @@ def main():
         print(line)
 
 
-def filter_paths(file_paths) -> Generator:
+def deploy_paths(file_paths) -> Generator:
     # Filters paths with wildcards
     for arg in file_paths:
         for path in expand_path(arg):
             yield path
 
 
-def expand_path(wildcard_path) -> Generator:
+def expand_path(path) -> Generator:
     non_text_file_extensions = [
     # Binary Executables
     ".exe", ".dll", ".so", ".bin", ".elf", ".o", ".a", ".dylib",
@@ -87,10 +87,15 @@ def expand_path(wildcard_path) -> Generator:
     ".crt", ".key", ".pem", ".cer"
     ]
 
-    p = str(Path(wildcard_path).expanduser())
+    path = Path(path).expanduser()
+
+    if path.is_dir():
+        path = path / "**"
+
+    p = str(path) # iglob takes issue with PosixPath: It's not scriptable
     try:
-        for path in iglob(p, recursive=True):
-            path = Path(path)
+        for expanded_path in iglob(p, recursive=True):
+            path = Path(expanded_path)
             if path.is_file() and path.suffix not in non_text_file_extensions:
                 yield path
     except PermissionError:
@@ -134,7 +139,7 @@ def handle_regex(pattern, args):
 
 def search_pattern(pattern: Pattern[bytes], file_paths: list) -> list:
     matches = []
-    for file in filter_paths(file_paths):
+    for file in deploy_paths(file_paths):
         try:
             if file.stat().st_size == 0:  # Check if file is empty
                 raise ValueError
