@@ -11,11 +11,10 @@ def main():
     args = parse_cmd_args()
 
     for pat in args.PATTERN:
-        args.PATTERN = str(pat)        # TODO: Check what glob does with paths that have no wildcards
+        args.PATTERN = str(pat)  # args.PATTERN is a list object
 
     pattern = handle_regex(args=args, pattern=args.PATTERN)
 
-    # encode() converts string (args.pattern) to a bytes object
     for line in search_pattern(pattern, args.FILENAME):
         print(line)
 
@@ -92,7 +91,7 @@ def expand_path(path) -> Generator:
     if path.is_dir():
         path = path / "**"
 
-    p = str(path) # iglob takes issue with PosixPath: It's not scriptable
+    p = str(path)  # iglob takes issue with PosixPath: It's not scriptable
     try:
         for expanded_path in iglob(p, recursive=True):
             path = Path(expanded_path)
@@ -124,6 +123,7 @@ def parse_cmd_args():
 
 def handle_regex(pattern, args):
     try:
+        # encode() converts string (args.PATTERN) to a bytes object
         compiled_pattern = re.compile(rb"" + pattern.encode(errors="strict") + rb"")
     except re.error as e:
         exit(f"pcat: regex error: {e}")
