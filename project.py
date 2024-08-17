@@ -290,11 +290,9 @@ def search_pattern(pattern: Pattern[bytes], file_paths: list) -> list:
                         if match := re.findall(pattern, line):
                             if len(line) > 384:
                                 line = line[0:383] 
-                            print(match)
                             color_line = line
                             for pt in match:
                                 color_pattern = b"\033[1;31m" + pt + b"\033[0;0m"
-                                print(color_pattern)
                                 color_line = re.sub(pt, color_pattern, color_line)
                             try:
                                 color_line = color_line.decode()
