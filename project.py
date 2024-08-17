@@ -152,6 +152,8 @@ def search_pattern(pattern: Pattern[bytes], file_paths: list) -> list:
                     matched_file = False
                     for line_num, line in enumerate(iter(mmap_obj.readline, b"")):
                         if match := re.search(pattern, line):
+                            if len(line) > 384:
+                                line = line[0:383]
                             color_pattern = b"\033[1;31m" + match.group() + b"\033[0;0m"
                             color_line = re.sub(pattern, color_pattern, line)
                             try:
