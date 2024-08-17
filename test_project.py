@@ -13,7 +13,7 @@ def test_parse_cmd_args():
     with patch.object(sys, "argv", test_args):
         args = parse_cmd_args()
         assert args.PATTERN == ["lorem"]  # Type is list because of nargs=1
-        assert args.FILENAME == ["file1.txt", "file2.txt"]
+        assert args.PATH == ["file1.txt", "file2.txt"]
         assert args.WORD == False
         assert args.NO_CASE == False
     test_args = ["pcat"]
