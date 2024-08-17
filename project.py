@@ -2,7 +2,7 @@ import re
 import mmap
 import argparse
 from sys import exit
-from glob import escape, iglob
+from glob import iglob
 from pathlib import Path
 from typing import Generator, Pattern
 
@@ -22,22 +22,9 @@ def main():
 
 
 def filter_paths(file_paths) -> Generator:
-    path_list: list[Path] = []
-    wildcard_paths: list = []
-
     # Filters paths with wildcards
     for arg in file_paths:
-        if escape(arg) == arg:
-            path_list.append(Path(arg).expanduser())
-        else:
-            wildcard_paths.append(arg)
-
-    if wildcard_paths:
-        for p in wildcard_paths:
-            for path in expand_path(p):
-                yield path
-    if path_list:
-        for path in path_list:
+        for path in expand_path(arg):
             yield path
 
 
