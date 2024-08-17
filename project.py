@@ -29,7 +29,6 @@ def filter_paths(file_paths) -> Generator:
 
 
 def expand_path(wildcard_path) -> Generator:
-    # See: https://stackoverflow.com/a/51108375/23356858
     p = str(Path(wildcard_path).expanduser())
     try:
         for path in iglob(p, recursive=True):
