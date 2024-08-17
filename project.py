@@ -28,11 +28,70 @@ def filter_paths(file_paths) -> Generator:
 
 
 def expand_path(wildcard_path) -> Generator:
+    non_text_file_extensions = [
+    # Binary Executables
+    ".exe", ".dll", ".so", ".bin", ".elf", ".o", ".a", ".dylib",
+
+    # Archives and Compressed Files
+    ".zip", ".tar", ".gz", ".bz2", ".xz", ".7z", ".rar", ".iso",
+
+    # Images
+    ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".ico", ".svg",
+
+    # Audio
+    ".mp3", ".wav", ".flac", ".aac", ".ogg", ".wma", ".m4a",
+
+    # Video
+    ".mp4", ".avi", ".mkv", ".mov", ".wmv", ".flv", ".mpeg", ".mpg",
+
+    # Fonts
+    ".ttf", ".otf", ".woff", ".woff2", ".eot",
+
+    # Documents and Office Files
+    ".pdf", ".doc", ".docx", ".ppt", ".pptx", ".xls", ".xlsx", ".odt", ".ods", ".odp", ".epub",
+
+    # Database Files
+    ".db", ".sqlite", ".accdb", ".mdb", ".sqlitedb",
+
+    # System Files
+    ".sys", ".dll", ".dmg", ".vmdk", ".iso",
+
+    # Disk Images and Virtual Machines
+    ".img", ".vhd", ".vdi", ".vmdk",
+
+    # Binary Data Files
+    ".dat", ".bin", ".dbf",
+
+    # Object and Bytecode Files
+    ".class", ".pyc", ".pyo", ".jar", ".war",
+
+    # Encrypted Files
+    ".gpg", ".aes", ".enc",
+
+    # Application Files
+    ".apk", ".ipa", ".msi", ".deb", ".rpm",
+
+    # CAD and 3D Modeling
+    ".dwg", ".dxf", ".stl", ".3ds", ".obj",
+
+    # Configuration and System Backup
+    ".bak", ".cfg", ".conf", ".ini", ".reg", ".log",
+
+    # Multimedia Projects
+    ".psd", ".ai", ".indd", ".prproj", ".aep", ".blend",
+
+    # Temporary Files
+    ".tmp", ".swp", ".lock", ".bak",
+
+    # Miscellaneous
+    ".crt", ".key", ".pem", ".cer"
+    ]
+
     p = str(Path(wildcard_path).expanduser())
     try:
         for path in iglob(p, recursive=True):
             path = Path(path)
-            if path.is_file():
+            if path.is_file() and path.suffix not in non_text_file_extensions:
                 yield path
     except PermissionError:
         pass
