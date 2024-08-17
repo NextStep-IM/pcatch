@@ -11,12 +11,11 @@ def main():
     args = parse_cmd_args()
 
     for pat in args.PATTERN:
-        args.PATTERN = str(pat)
+        args.PATTERN = str(pat)        # TODO: Check what glob does with paths that have no wildcards
+
+    pattern = handle_regex(args=args, pattern=args.PATTERN)
+
     # encode() converts string (args.pattern) to a bytes object
-    try:
-        pattern = re.compile(rb"" + args.PATTERN.encode(errors="strict") + rb"")
-    except re.error as e:
-        exit(f"pcat: regex error: {e}")
     for line in search_pattern(pattern, args.FILENAME):
         print(line)
 
@@ -51,10 +50,27 @@ def parse_cmd_args():
     parser.add_argument(
         "PATTERN", type=str, help="Pattern to search for in file(s)", nargs=1
     )
-    parser.add_argument("FILENAME", nargs="*", default="**")
+    parser.add_argument("FILENAME", nargs="*", default="**", help="Files(s) to search for")
+    parser.add_argument("-w", "--word", action="store_true", dest="WORD", help="Search pattern as word")
+    parser.add_argument("-i", "--ignore-case", action="store_true", dest="NO_CASE", help="Search case-insensitively")
 
     parsed_args = parser.parse_args()
     return parsed_args
+
+
+def handle_regex(pattern, args):
+    try:
+        compiled_pattern = re.compile(rb"" + pattern.encode(errors="strict") + rb"")
+    except re.error as e:
+        exit(f"pcat: regex error: {e}")
+
+    if args.WORD:
+        compiled_pattern = re.compile(rb"\b" + compiled_pattern.pattern + rb"\b")
+
+    if args.NO_CASE:
+        compiled_pattern = re.compile(rb"" + compiled_pattern.pattern + rb"", flags=re.IGNORECASE)
+
+    return compiled_pattern
 
 
 def search_pattern(pattern: Pattern[bytes], file_paths: list) -> list:
