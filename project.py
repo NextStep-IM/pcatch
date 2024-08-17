@@ -15,11 +15,19 @@ def main():
 
     pattern = handle_regex(args=args, pattern=args.PATTERN)
 
-    for line in search_pattern(pattern, args.FILENAME):
+    for line in search_pattern(pattern, args.PATH):
         print(line)
 
 
 def deploy_paths(file_paths: list) -> Generator:
+    """Takes a path from expand_path() one by one and yields it to search_pattern()
+
+    Args:
+        file_paths (list): This is the list of paths given by the user. It is first taken as a param by search_pattern()
+
+    Yields:
+        Generator: Path object
+    """
     # Filters paths with wildcards
     for arg in file_paths:
         for path in expand_path(arg):
@@ -27,6 +35,14 @@ def deploy_paths(file_paths: list) -> Generator:
 
 
 def expand_path(path) -> Generator:
+    """Expands path with wildcards, leaves it as it was if there are no wildcards
+
+    Args:
+        path (str): A path with optional wildcards
+
+    Yields:
+        Generator: Path object
+    """
     non_text_file_extensions = [
         # Binary Executables
         ".exe",
@@ -175,11 +191,17 @@ def expand_path(path) -> Generator:
 
 
 def parse_cmd_args():
+    """Parses arguments given by user
+
+    Returns:
+        argparse.Namespace: Parsed user-given arguments
+    """
     # Sets up the skeleton of the program
 
     parser = argparse.ArgumentParser(
         prog="pcat",
         description="Checks for given pattern in files",
+        usage="python project.py [-h] [-w] [-i] PATTERN [PATH ...]",
     )
 
     # required param not allowed for positional args
@@ -187,7 +209,10 @@ def parse_cmd_args():
         "PATTERN", type=str, help="Pattern to search for in file(s)", nargs=1
     )
     parser.add_argument(
-        "FILENAME", nargs="*", default="**", help="Files(s) to search for"
+        "PATH",
+        nargs="*",
+        default="**",
+        help="Files(s) to search for. If no value is given, it will search the curreny working directory (non-recursively)",
     )
     parser.add_argument(
         "-w", "--word", action="store_true", dest="WORD", help="Search pattern as word"
@@ -205,6 +230,15 @@ def parse_cmd_args():
 
 
 def handle_regex(pattern: str, args) -> Pattern:
+    """Generates the regex pattern according to options
+
+    Args:
+        pattern (str): Search pattern given by user
+        args (argparse.Namespace): Parsed user-given arguments
+
+    Returns:
+        Pattern[bytes]: Generated pattern
+    """
     try:
         # encode() converts string (args.PATTERN) to a bytes object
         compiled_pattern = re.compile(rb"" + pattern.encode(errors="strict") + rb"")
@@ -223,6 +257,18 @@ def handle_regex(pattern: str, args) -> Pattern:
 
 
 def search_pattern(pattern: Pattern[bytes], file_paths: list) -> list:
+    """_summary_
+
+    Args:
+        pattern (Pattern[bytes]): Genereated regex pattern by handle_regex()
+        file_paths (list): User-given paths
+
+    Raises:
+        ValueError: If file is empty. Reason: mmap.mmap() gives an error if file is empty
+
+    Returns:
+        list: Lines with matched pattern.
+    """
     matches = []
     for file in deploy_paths(file_paths):
         try:
