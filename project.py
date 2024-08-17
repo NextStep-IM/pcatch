@@ -287,11 +287,15 @@ def search_pattern(pattern: Pattern[bytes], file_paths: list) -> list:
                 ) as mmap_obj:  # Raises ValueError if file is empty
                     matched_file = False
                     for line_num, line in enumerate(iter(mmap_obj.readline, b"")):
-                        if match := re.search(pattern, line):
+                        if match := re.findall(pattern, line):
                             if len(line) > 384:
-                                line = line[0:383]
-                            color_pattern = b"\033[1;31m" + match.group() + b"\033[0;0m"
-                            color_line = re.sub(pattern, color_pattern, line)
+                                line = line[0:383] 
+                            print(match)
+                            color_line = line
+                            for pt in match:
+                                color_pattern = b"\033[1;31m" + pt + b"\033[0;0m"
+                                print(color_pattern)
+                                color_line = re.sub(pt, color_pattern, color_line)
                             try:
                                 color_line = color_line.decode()
                             except UnicodeDecodeError:
