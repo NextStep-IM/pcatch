@@ -3,7 +3,6 @@ from unittest.mock import patch
 from project import parse_cmd_args
 import sys
 import tempfile  # for creating temporary files and dirs
-from binaryornot.check import is_binary
 
 
 def test_parse_args():
