@@ -52,7 +52,10 @@ options:
 - Gives colored output
 ## Discussion:
 ### Why are lines sliced if they exceed certain length?
-That is because when I was not filtering binary file, I came upon files with _very_ long lines during pattern search. Now binary files are filtered but the code will still be there just in case. The length is `768` because that's the approximate amount of bytes four lines have on my 1920x1080 monitor :).
+> [!NOTE]
+> Need an algorithm to decide how much of a line is sliced.
+
+That is because when I was not filtering binary file, I came upon files with _very_ long lines during pattern search. Now binary files are filtered but the code will still be there just in case longer lines are encountered. The length is `768` because that's the approximate amount of bytes four lines have on my 1920x1080 monitor :).
 ### Binary files:
 After madly searching the internet for a way to skip binary files (in Python), I came upon [`binaryornot`](https://pypi.org/project/binaryornot/). It used several code snippets found around the internet to check for binary files. I only found out that it was hogging most of the runtime by using [`cProfile`](https://docs.python.org/3/library/profile.html#module-cProfile). It took 50s more if I was searching this path: `/opt/**/*`. So I got rid of it and just used a list of binary file extensions to filter the paths, which is faster.
 ### Runtime:
