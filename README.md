@@ -8,6 +8,42 @@ Because I love CLI tools.
 - It takes a pattern, optional path(s) and other options and then uses [`argparse`](https://docs.python.org/3/library/argparse.html) to parse them.
 - It uses memory mapping ([`mmap`](https://docs.python.org/3/library/mmap.html)) to open files which helps make the process faster in case of large files
 - It uses regex ([`re`](https://docs.python.org/3/library/re.html#)) to search for matching patterns in files and then print them.
+
+## Usage:
+```
+usage: python project.py [-h] [-w] [-i] PATTERN [PATH ...]
+
+Checks for given pattern in files
+
+positional arguments:
+  PATTERN            Pattern to search for in file(s)
+  PATH               Files(s) to search for. If no value is given, it will search the curreny working directory (non-recursively)
+
+options:
+  -h, --help         show this help message and exit
+  -w, --word         Search pattern as word
+  -i, --ignore-case  Search case-insensitively
+```
+### How to use (step-by-step):
+1. Clone the repo:
+   ```
+    git clone https://github.com/NextStep-IM/pcatch.git
+   ```
+2. Enter the repo:
+   ```
+    cd pcatch
+   ```
+3. Run the program:
+   ```
+    python pcatch.py <PATTERN> <FILES>
+   ```
+   The PATTERN can be a simple string or a regex pattern. You can use wildcards in place of FILES.
+   
+   Example command (to be run in the `pcatch` directory):
+   ```
+    python pcatch.py "parse" "*"
+   ```
+
 ## Features:
 - User can search case-insensitively and by word
 - The inputted pattern can be a regex
