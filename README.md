@@ -35,9 +35,9 @@ options:
    ```
 3. Run the program:
    ```
-    python pcatch.py <PATTERN> <FILES>
+    python pcatch.py <PATTERN> <FILE>
    ```
-   The PATTERN can be a simple string or a regex pattern. You can use wildcards in place of FILES.
+   You can give multiple files as input. The PATTERN can be a simple string or a regex pattern. You can use wildcards in place of FILES.
    
    Example command (to be run in the `pcatch` directory):
    ```
