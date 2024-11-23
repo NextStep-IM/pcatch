@@ -1,4 +1,4 @@
-# pcatch
+# _pcatch_ (Pattern Catcher)
 # Video Demo: https://youtu.be/YUnIjrNXx_o
 # Description:
 `pcatch` or `pcat`, short for Pattern Catcher, is a CLI tool that is an immitation of [`ripgrep`](https://github.com/BurntSushi/ripgrep) (a poor one admittingly). It searches for a pattern in files.
